@@ -1,0 +1,175 @@
+/* =========================================================
+   1. TOKENS: colores y tipografía (claro por defecto)
+   ========================================================= */
+:root {
+  --bg: #F5F5F3;
+  --text: #141414;
+  --muted: #6b6b66;
+  --border: #E0E0DC;
+  --accent: #e2725b;          /* único acento: enlaces activos y etiquetas */
+  --overlay: rgba(245,245,243,.94);
+  --sans: "Inter", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", "Space Mono", ui-monospace, monospace;
+  --radius: 3px;              /* bordes casi rectos (2–4px) */
+  --gap: 12px;
+  --pad: clamp(16px, 4vw, 48px);
+  color-scheme: light;
+}
+/* Oscuro: automático según el sistema, o forzado con el botón */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg:#121211; --text:#ECECE8; --muted:#8e8e88; --border:#2b2b28; --overlay:rgba(18,18,17,.94); color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg:#121211; --text:#ECECE8; --muted:#8e8e88; --border:#2b2b28; --overlay:rgba(18,18,17,.94); color-scheme: dark; }
+
+/* =========================================================
+   2. BASE
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 400 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.mono { font-family: var(--mono); font-size: 12px; }
+.muted { color: var(--muted); }
+
+/* Etiqueta técnica (software, año, categoría) */
+.tag {
+  font: 400 12px/1 var(--mono); padding: 5px 8px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+
+/* Enlaces y botones de texto: subrayado fino; el acento aparece al activarse */
+.header-links a, .link-btn, .filters button, .email {
+  text-decoration: underline; text-decoration-color: var(--border);
+  text-underline-offset: 4px; transition: color .15s, text-decoration-color .15s;
+}
+.header-links a:hover, .link-btn:hover, .email:hover { color: var(--accent); text-decoration-color: var(--accent); }
+
+/* =========================================================
+   3. CABECERA
+   ========================================================= */
+.site-header {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 24px 48px; flex-wrap: wrap;
+  padding: var(--pad) var(--pad) 24px;
+}
+h1 { margin: 0 0 12px; font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+.lead { margin: 0; max-width: 52ch; color: var(--muted); }
+.header-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+.stack { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 var(--pad) 32px; }
+
+/* =========================================================
+   4. FILTROS
+   ========================================================= */
+.filters {
+  display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap;
+  margin: 0 var(--pad) 20px; padding: 14px 0; border-block: 1px solid var(--border);
+}
+.filters button { color: var(--muted); text-decoration-color: transparent; }
+.filters button[aria-pressed="true"] { color: var(--accent); text-decoration-color: var(--accent); }
+.filters button:hover { color: var(--text); }
+.filters .count { margin-left: auto; color: var(--muted); }
+
+/* =========================================================
+   5. GALERÍA ASIMÉTRICA (bento grid de 6 columnas)
+   El tamaño de cada pieza se define con su "size" en script.js
+   ========================================================= */
+.grid {
+  display: grid; gap: var(--gap); padding: 0 var(--pad);
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: clamp(70px, 9vw, 130px);
+  grid-auto-flow: dense;       /* rellena huecos al filtrar */
+}
+.item { position: relative; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--border); background: var(--border); cursor: pointer; padding: 0; text-align: left; }
+.item.lg   { grid-column: span 4; grid-row: span 4; }  /* pieza principal */
+.item.md   { grid-column: span 2; grid-row: span 2; }
+.item.wide { grid-column: span 3; grid-row: span 2; }
+.item.tall { grid-column: span 2; grid-row: span 3; }
+.item img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Hover: título y herramientas, sin sombras */
+.item .info {
+  position: absolute; inset: auto 0 0 0; padding: 12px 14px;
+  background: var(--overlay); border-top: 1px solid var(--border);
+  transform: translateY(100%); transition: transform .2s ease;
+  display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
+}
+.item:hover .info, .item:focus-visible .info { transform: none; }
+.info b { font-weight: 500; }
+.info span { font: 400 11px var(--mono); color: var(--accent); text-align: right; }
+.item[hidden] { display: none; }
+/* En pantallas táctiles no hay hover: se muestra siempre */
+@media (hover: none) { .item .info { transform: none; } }
+
+/* =========================================================
+   6. MODAL DE DETALLE
+   ========================================================= */
+dialog {
+  width: min(1100px, 94vw); max-height: 92vh; padding: 0; overflow: auto;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+dialog::backdrop { background: rgba(20,20,20,.55); }
+.modal-bar {
+  position: sticky; top: 0; z-index: 2; background: var(--bg);
+  display: flex; justify-content: space-between; gap: 16px; align-items: flex-start;
+  padding: 18px 24px; border-bottom: 1px solid var(--border);
+}
+.modal-bar h2 { margin: 0 0 2px; font-size: 17px; font-weight: 600; }
+.modal-bar p { margin: 0; }
+.modal-body { padding: 24px; display: grid; gap: 20px; }
+.modal-body figure { margin: 0; }
+.modal-body figure img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); }
+figcaption { margin-top: 8px; font: 400 12px var(--mono); color: var(--muted); }
+.cols { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; }
+.modal-body p { margin: 0; max-width: 62ch; }
+.meta { display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; margin: 0; font-size: 13px; align-content: start; }
+.meta dt { font: 400 12px var(--mono); color: var(--muted); }
+.meta dd { margin: 0; }
+.tools { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Bloque de código con botón de copiar */
+.code { position: relative; border: 1px solid var(--border); border-radius: var(--radius); }
+.code pre { margin: 0; padding: 18px; overflow: auto; font: 400 12.5px/1.6 var(--mono); }
+.code .copy { position: absolute; top: 8px; right: 10px; font: 400 12px var(--mono); color: var(--muted); background: var(--bg); padding: 2px 6px; }
+.code .copy:hover { color: var(--accent); }
+.links { display: flex; gap: 20px; }
+.links a { text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 4px; }
+.links a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+
+/* Comparativa antes/después (Photoshop) */
+.compare { position: relative; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.compare img { width: 100%; border: 0 !important; border-radius: 0 !important; }
+.compare .after { position: absolute; inset: 0; clip-path: inset(0 0 0 var(--pos, 50%)); }
+.compare .line { position: absolute; top: 0; bottom: 0; left: var(--pos, 50%); width: 1px; background: var(--accent); pointer-events: none; }
+.compare input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+.layers { margin: 0; padding: 0; list-style: none; font: 400 12px/1.9 var(--mono); }
+.layers li { border-bottom: 1px solid var(--border); padding-left: calc(var(--d, 0) * 14px); }
+
+/* =========================================================
+   7. PIE
+   ========================================================= */
+.site-footer {
+  display: flex; align-items: baseline; gap: 16px 24px; flex-wrap: wrap;
+  margin-top: 64px; padding: 20px var(--pad) 40px; border-top: 1px solid var(--border);
+}
+.site-footer .header-links { margin-left: auto; }
+.email { font-size: 13px; }
+
+/* =========================================================
+   8. RESPONSIVE
+   ========================================================= */
+@media (max-width: 760px) {
+  .grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 28vw; }
+  .item.lg, .item.wide { grid-column: span 2; grid-row: span 3; }
+  .item.md { grid-column: span 1; grid-row: span 2; }
+  .item.tall { grid-column: span 1; grid-row: span 3; }
+  .cols { grid-template-columns: 1fr; }
+  .site-footer .header-links { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tatiana Celeste G. B. · Modelado 3D, scripts, Photoshop y más</title>
+  <meta name="description" content="Portfolio de modelado 3D, herramientas técnicas y retoque en Photoshop.">
+  <link rel="icon" href="img/Black_computer_icon.svg">
+  <!-- Tipografías: Inter (texto) y JetBrains Mono (etiquetas técnicas) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Aplica el tema guardado antes de pintar, para evitar parpadeo -->
+  <script>
+    try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============ CABECERA ============ -->
+  <header class="site-header">
+    <div class="header-main">
+      <h1>Tatiana Celeste Gauna Bonini</h1>
+      <p class="lead">
+        Modelado 3D: assets y texturizado.<br>
+        Scripts.<br>
+        Ofimática.<br>
+        Conexión remota.<br>
+      </p>
+    </div>
+    <nav class="header-links" aria-label="Contacto y redes">
+      <a href="mailto:tatianaceleste.contacto@gmail.com">Contacto</a>
+      <a href="https://github.com/tatianaceleste" target="_blank" rel="noopener">GitHub</a>
+      <!-- Cambia entre modo claro y oscuro -->
+      <button id="theme-toggle" class="link-btn" type="button" aria-label="Cambiar tema">Tema</button>
+    </nav>
+  </header>
+
+  <!-- Software que uso: etiquetas simples, sin porcentajes -->
+  <section class="stack" aria-label="Software">
+    <span class="tag">Blender</span>
+    <span class="tag">Word</span>
+    <span class="tag">Python</span>
+    <span class="tag">AnyDesk</span>
+    <span class="tag">Parsec</span>
+  </section>
+
+  <!-- ============ FILTRO ============ -->
+  <nav class="filters" id="filters" aria-label="Filtrar proyectos">
+    <button type="button" data-filter="all" aria-pressed="true">Todos</button>
+    <button type="button" data-filter="3d" aria-pressed="false">Modelado 3D</button>
+    <button type="button" data-filter="script" aria-pressed="false">Scripts</button>
+    <span class="count mono" id="count" aria-live="polite"></span>
+  </nav>
+
+  <!-- ============ GALERÍA (se genera desde script.js) ============ -->
+  <main>
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <!-- ============ VISTA DE DETALLE ============ -->
+  <dialog id="modal" aria-labelledby="modal-title">
+    <div class="modal-bar">
+      <div>
+        <h2 id="modal-title"></h2>
+        <p class="mono muted" id="modal-meta"></p>
+      </div>
+      <button type="button" class="link-btn" id="modal-close">Cerrar</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </dialog>
+
+  <!-- ============ PIE ============ -->
+  <footer class="site-footer">
+    <button type="button" id="copy-email" class="email mono" data-email="tatianaceleste.contacto@gmail.com">tatianaceleste.contacto@gmail.com</button>
+    <span class="mono muted" id="copy-status" role="status"></span>
+    <nav class="header-links" aria-label="Redes">
+      <a href="https://github.com/tatianaceleste" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
